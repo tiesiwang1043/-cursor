@@ -13,6 +13,7 @@
             height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
+            transition: background-color 0.5s ease;
         }
         .container {
             text-align: center;
@@ -20,6 +21,10 @@
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .container:hover {
+            transform: scale(1.05);
         }
         button {
             padding: 10px 20px;
@@ -30,35 +35,63 @@
             border-radius: 5px;
             cursor: pointer;
             margin: 10px;
+            transition: all 0.3s ease;
         }
         button:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .counter {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+            margin: 10px 0;
+        }
+        .rainbow-text {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow 3s ease-in-out infinite;
+        }
+        @keyframes rainbow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>最简单的程序</h1>
+        <h1 class="rainbow-text">最简单的程序</h1>
         <p id="message">欢迎来到我的第一个程序！</p>
+        <div class="counter">点击次数: <span id="clickCount">0</span></div>
         <button onclick="sayHello()">点击我</button>
         <button onclick="changeColor()">改变颜色</button>
         <button onclick="sheepSound()">🐑 羊叫</button>
+        <button onclick="showTime()">🕐 显示时间</button>
+        <button onclick="createFirework()">🎆 烟花</button>
+        <button onclick="resetCounter()">🔄 重置计数</button>
     </div>
 
     <script>
+        let clickCount = 0;
+
         /**
-         * 显示问候消息
+         * 显示问候消息并增加点击计数
          */
         function sayHello() {
             const message = document.getElementById('message');
-            message.textContent = '你好，世界！这是一个最简单的程序！';
+            clickCount++;
+            updateCounter();
+            message.textContent = `你好，世界！这是第${clickCount}次点击！`;
         }
 
         /**
          * 改变页面背景颜色
          */
         function changeColor() {
-            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57'];
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'];
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
             document.body.style.backgroundColor = randomColor;
         }
@@ -96,6 +129,73 @@
             const message = document.getElementById('message');
             message.textContent = '咩咩咩！羊在叫呢！🐑';
         }
-    </script>
-</body>
-</html> 
+
+        /**
+         * 显示当前时间
+         */
+        function showTime() {
+            const message = document.getElementById('message');
+            const now = new Date();
+            const timeString = now.toLocaleString('zh-CN');
+            message.textContent = `当前时间: ${timeString}`;
+        }
+
+        /**
+         * 创建烟花效果
+         */
+        function createFirework() {
+            const firework = document.createElement('div');
+            firework.style.position = 'fixed';
+            firework.style.left = Math.random() * window.innerWidth + 'px';
+            firework.style.top = Math.random() * window.innerHeight + 'px';
+            firework.style.width = '10px';
+            firework.style.height = '10px';
+            firework.style.borderRadius = '50%';
+            firework.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 50%)`;
+            firework.style.pointerEvents = 'none';
+            firework.style.zIndex = '1000';
+            firework.style.animation = 'firework 1s ease-out forwards';
+            
+            document.body.appendChild(firework);
+            
+            setTimeout(() => {
+                document.body.removeChild(firework);
+            }, 1000);
+        }
+
+        /**
+         * 重置点击计数器
+         */
+        function resetCounter() {
+            clickCount = 0;
+            updateCounter();
+            const message = document.getElementById('message');
+            message.textContent = '计数器已重置！';
+        }
+
+        /**
+         * 更新计数器显示
+         */
+        function updateCounter() {
+            document.getElementById('clickCount').textContent = clickCount;
+        }
+
+        // 添加烟花动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes firework {
+                0% {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                50% {
+                    transform: scale(1.5);
+                    opacity: 0.8;
+                }
+                100% {
+                    transform: scale(0);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
