@@ -72,6 +72,18 @@
         <button onclick="showTime()">🕐 显示时间</button>
         <button onclick="createFirework()">🎆 烟花</button>
         <button onclick="resetCounter()">🔄 重置计数</button>
+        <div id="calculator" style="margin-top: 30px;">
+            <input type="number" id="num1" placeholder="数字1" style="width: 80px;">
+            <select id="operator">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">*</option>
+                <option value="/">/</option>
+            </select>
+            <input type="number" id="num2" placeholder="数字2" style="width: 80px;">
+            <button onclick="calculate()">计算</button>
+            <span id="calcResult" style="margin-left: 10px; font-weight: bold;"></span>
+        </div>
     </div>
 
     <script>
@@ -180,6 +192,36 @@
             document.getElementById('clickCount').textContent = clickCount;
         }
 
+        /**
+         * 计算器功能
+         */
+        function calculate() {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            const operator = document.getElementById('operator').value;
+            let result = '';
+
+            if (isNaN(num1) || isNaN(num2)) {
+                result = '请输入数字';
+            } else {
+                switch (operator) {
+                    case '+':
+                        result = num1 + num2;
+                        break;
+                    case '-':
+                        result = num1 - num2;
+                        break;
+                    case '*':
+                        result = num1 * num2;
+                        break;
+                    case '/':
+                        result = num2 !== 0 ? (num1 / num2) : '除数不能为0';
+                        break;
+                }
+            }
+            document.getElementById('calcResult').textContent = result;
+        }
+
         // 添加烟花动画样式
         const style = document.createElement('style');
         style.textContent = `
@@ -199,3 +241,6 @@
             }
         `;
         document.head.appendChild(style);
+    </script>
+</body>
+</html>
